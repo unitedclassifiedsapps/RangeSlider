@@ -61,8 +61,8 @@ class RangeSliderThumbLayer: CALayer {
             return
         }
         
-        let thumbFrame = bounds.insetBy(dx: 2.0, dy: 2.0)
-        let cornerRadius = thumbFrame.height * slider.curvaceousness / 2.0
+        let thumbFrame = bounds.insetBy(dx: slider.thumbInset, dy: slider.thumbInset)
+        let cornerRadius = thumbFrame.height * slider.thumbCurvaceousness / 2.0
         let thumbPath = UIBezierPath(roundedRect: thumbFrame, cornerRadius: cornerRadius)
         
         // Fill
@@ -138,6 +138,20 @@ public class RangeSlider: UIControl {
         }
     }
     
+    @IBInspectable public var trackerHeight: CGFloat = 6.0 {
+        didSet {
+            trackLayer.setNeedsDisplay()
+        }
+    }
+    
+    @IBInspectable public var thumbInset: CGFloat = 2.0 {
+        didSet {
+            trackLayer.setNeedsDisplay()
+            lowerThumbLayer.setNeedsDisplay()
+            upperThumbLayer.setNeedsDisplay()
+        }
+    }
+    
     @IBInspectable public var thumbTintColor: UIColor = UIColor.white {
         didSet {
             lowerThumbLayer.setNeedsDisplay()
@@ -159,6 +173,21 @@ public class RangeSlider: UIControl {
         }
     }
     
+    @IBInspectable public var thumbCurvaceousness: CGFloat = 1.0 {
+        didSet {
+            if thumbCurvaceousness < 0.0 {
+                thumbCurvaceousness = 0.0
+            }
+            
+            if thumbCurvaceousness > 1.0 {
+                thumbCurvaceousness = 1.0
+            }
+            
+            lowerThumbLayer.setNeedsDisplay()
+            upperThumbLayer.setNeedsDisplay()
+        }
+    }
+    
     @IBInspectable public var curvaceousness: CGFloat = 1.0 {
         didSet {
             if curvaceousness < 0.0 {
@@ -170,8 +199,6 @@ public class RangeSlider: UIControl {
             }
             
             trackLayer.setNeedsDisplay()
-            lowerThumbLayer.setNeedsDisplay()
-            upperThumbLayer.setNeedsDisplay()
         }
     }
     
@@ -226,7 +253,7 @@ public class RangeSlider: UIControl {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         
-        trackLayer.frame = bounds.insetBy(dx: 0.0, dy: bounds.height/3)
+        trackLayer.frame =  CGRect(x: thumbInset, y: (bounds.height-trackerHeight)/2, width: bounds.width-(thumbInset*2), height: trackerHeight)
         trackLayer.setNeedsDisplay()
         
         let lowerThumbCenter = CGFloat(positionForValue(lowerValue))
