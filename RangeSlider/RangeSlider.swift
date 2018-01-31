@@ -122,9 +122,7 @@ public class RangeSlider: UIControl {
         }
     }
     
-    var gapBetweenThumbs: Double {
-        return 0.5 * Double(thumbWidth) * (maximumValue - minimumValue) / Double(bounds.width)
-    }
+    public var gapBetweenThumbs: Double = 0.0
     
     @IBInspectable public var trackTintColor: UIColor = UIColor(white: 0.9, alpha: 1.0) {
         didSet {
@@ -300,6 +298,11 @@ public class RangeSlider: UIControl {
         let deltaValue = (maximumValue - minimumValue) * deltaLocation / Double(bounds.width - bounds.height)
         
         previouslocation = location
+        
+        if (lowerValue == upperValue) {
+            lowerThumbLayer.highlighted = deltaValue < 0
+            upperThumbLayer.highlighted = deltaValue >= 0
+        }
         
         // Update the values
         if lowerThumbLayer.highlighted {
