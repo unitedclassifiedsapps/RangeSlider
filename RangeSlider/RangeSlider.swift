@@ -252,7 +252,7 @@ public class RangeSlider: UIControl {
         CATransaction.setDisableActions(true)
         
         trackLayer.frame =  CGRect(x: thumbInset+touchDiffIncrease, y: (bounds.height-trackerHeight)/2, width: bounds.width-(thumbInset*2)-(touchDiffIncrease*2), height: trackerHeight)
-        print(trackLayer.frame.debugDescription)
+        //print(trackLayer.frame.debugDescription)
         trackLayer.setNeedsDisplay()
         
         let lowerThumbCenter = CGFloat(positionForValue(lowerValue))
